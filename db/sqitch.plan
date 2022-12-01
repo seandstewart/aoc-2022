@@ -1,0 +1,6 @@
+%syntax-version=1.0.0
+%project=aoc-2022
+%uri=https://github.com/seandstewart/aoc-2022.git
+
+aocschema 2022-12-01T15:40:32Z System Administrator <root@Seans-MacBook-Pro-3.local> # Create initial schema
+day1 [aocschema] 2022-12-01T17:41:39Z System Administrator <root@Seans-MacBook-Pro-3.local> # Create tables for tracking day 1 input.
