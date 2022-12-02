@@ -84,92 +84,62 @@ class MealsRepository(yesql.SyncQueryRepository):
         __tablename__ = "meals"
 
     @typing.overload
-    def get_meal(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'Any':
+    def all(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'list[Any]':
         """
         """
 
     @typing.overload
-    def get_meal(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'Any':
+    def all(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'list[Any]':
         """
         """
 
     @typing.overload
-    def get_meal(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+    def all(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
         """
         """
 
     @typing.overload
-    def get_meal(self, /, *, id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'Any':
+    def all(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'list[Any]':
         """
         """
 
     @typing.overload
-    def get_meal(self, /, *, id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'Any':
+    def all(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'list[Any]':
         """
         """
 
     @typing.overload
-    def get_meal(self, /, *, id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+    def all(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
         """
         """
 
     @typing.overload
-    def get_meal_by_elf_id(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'list[Any]':
+    def all_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
         """
         """
 
     @typing.overload
-    def get_meal_by_elf_id(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'list[Any]':
+    def all_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
         """
         """
 
     @typing.overload
-    def get_meal_by_elf_id(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+    def all_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
         """
         """
 
     @typing.overload
-    def get_meal_by_elf_id(self, /, *, elf_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'list[Any]':
+    def all_cursor(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
         """
         """
 
     @typing.overload
-    def get_meal_by_elf_id(self, /, *, elf_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'list[Any]':
+    def all_cursor(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
         """
         """
 
     @typing.overload
-    def get_meal_by_elf_id(self, /, *, elf_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
-        """
-        """
-
-    @typing.overload
-    def get_meal_by_elf_id_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
-        """
-        """
-
-    @typing.overload
-    def get_meal_by_elf_id_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
-        """
-        """
-
-    @typing.overload
-    def get_meal_by_elf_id_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
-        """
-        """
-
-    @typing.overload
-    def get_meal_by_elf_id_cursor(self, /, *, elf_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
-        """
-        """
-
-    @typing.overload
-    def get_meal_by_elf_id_cursor(self, /, *, elf_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
-        """
-        """
-
-    @typing.overload
-    def get_meal_by_elf_id_cursor(self, /, *, elf_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
+    def all_cursor(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
         """
         """
 
@@ -200,6 +170,36 @@ class MealsRepository(yesql.SyncQueryRepository):
 
     @typing.overload
     def get_elf_with_max_calories(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def get_total_calories_for_top_three(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def get_total_calories_for_top_three(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, coerce: 'typing.Literal[True]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def get_total_calories_for_top_three(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def get_total_calories_for_top_three(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def get_total_calories_for_top_three(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, coerce: 'typing.Literal[True]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def get_total_calories_for_top_three(self, /, *, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
         """
         """
 

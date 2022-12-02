@@ -15,7 +15,7 @@ def parse_day1() -> dict[int, list[int]]:
     }
 
 
-def solve_day1_part1() -> tuple[int, int]:
+def solve_day1() -> tuple[int, int]:
     elves = repository.ElvesRepository()
     meals = repository.MealsRepository(executor=elves.executor)
     with elves.executor.transaction(rollback=True) as conn:
@@ -33,8 +33,12 @@ def solve_day1_part1() -> tuple[int, int]:
             meals=support.dumps(meals_to_persist),
             connection=conn
         )
-        return meals.get_elf_with_max_calories(connection=conn)
+        max_cals = meals.get_elf_with_max_calories(connection=conn)
+        top_three =  meals.get_total_calories_for_top_three(connection=conn)
+        return max_cals, top_three
 
 
 if __name__ == '__main__':
-    print(solve_day1_part1())
+    max_cals, top_three = solve_day1()
+    print(max_cals)
+    print(top_three)
