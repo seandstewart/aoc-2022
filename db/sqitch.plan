@@ -4,3 +4,4 @@
 
 aocschema 2022-12-01T15:40:32Z System Administrator <root@Seans-MacBook-Pro-3.local> # Create initial schema
 day1 [aocschema] 2022-12-01T17:41:39Z System Administrator <root@Seans-MacBook-Pro-3.local> # Create tables for tracking day 1 input.
+day2 [aocschema] 2022-12-02T23:08:23Z System Administrator <root@Seans-MacBook-Pro-3.local> # Add support for tracking rock-paper-scissors moves and scores
