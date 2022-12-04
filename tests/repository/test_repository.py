@@ -125,7 +125,7 @@ class TestTournamentRepository:
             dict(left_move="B", right_move="X"),
             dict(left_move="C", right_move="Z"),
         ]
-        expected_outcome = (mock.ANY, 15, 15)
+        expected_outcome = (mock.ANY, 15, 12)
         # When
         tournament_id = tournament_repository.save_tournament(
             moves=support.dumps(tournament_moves),
