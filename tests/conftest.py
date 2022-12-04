@@ -30,3 +30,9 @@ def meals_repository(executor) -> repository.MealsRepository:
 def elves_repository(executor) -> repository.ElvesRepository:
     repo = repository.ElvesRepository(executor=executor)
     return repo
+
+
+@pytest.fixture
+def tournament_repository(executor):
+    repo = repository.TournamentRepository(executor=executor)
+    return repo

@@ -7,7 +7,7 @@ from src import read
 from src.repository import repository
 
 
-def parse_day1() -> dict[int, list[int]]:
+def parse() -> dict[int, list[int]]:
     data = read.get_input(1)
     return {
         id: [int(c) for c in inp.splitlines()]
@@ -15,11 +15,11 @@ def parse_day1() -> dict[int, list[int]]:
     }
 
 
-def solve_day1() -> tuple[int, int]:
+def solve() -> tuple[int, int]:
     elves = repository.ElvesRepository()
     meals = repository.MealsRepository(executor=elves.executor)
     with elves.executor.transaction(rollback=True) as conn:
-        meal_log = parse_day1()
+        meal_log = parse()
         elves.persist_elves(
             elves=support.dumps([{"id": i} for i in meal_log.keys()]),
             connection=conn
@@ -39,6 +39,6 @@ def solve_day1() -> tuple[int, int]:
 
 
 if __name__ == '__main__':
-    max_cals, top_three = solve_day1()
+    max_cals, top_three = solve()
     print(max_cals)
     print(top_three)

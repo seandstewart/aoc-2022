@@ -1,3 +1,5 @@
+from unittest import mock
+
 import orjson
 from yesql import support
 
@@ -112,3 +114,25 @@ class TestMealsRepository:
         )
         # Then
         assert top_three_total == expected_total
+
+
+class TestTournamentRepository:
+
+    def test_save_tournament(self, tournament_repository, session):
+        # Given
+        tournament_moves = [
+            dict(left_move="A", right_move="Y"),
+            dict(left_move="B", right_move="X"),
+            dict(left_move="C", right_move="Z"),
+        ]
+        expected_outcome = (mock.ANY, 15, 15)
+        # When
+        tournament_id = tournament_repository.save_tournament(
+            moves=support.dumps(tournament_moves),
+            connection=session,
+        )
+        outcome = tournament_repository.calculate_tournament_outcome(
+            tournament_id=tournament_id, connection=session
+        )
+        # Then
+        assert outcome == expected_outcome
