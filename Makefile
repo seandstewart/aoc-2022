@@ -48,9 +48,9 @@ part ?= 1
 puzzle:  ## Get the puzzle for the targeted day. Arguments: `day=<day|1>`, `part=<part|1>`.
 	cp -R "day/.template" "day/$(day)"
 	chmod +x "day/$(day)/solve.py"
+	aoc download --day=$(day) --input-file="day/$(day)/input" --puzzle-file="day/$(day)/puzzle.md" --overwrite
+	aoc read --day=$(day)
 	git add "day/$(day)/"
-	aoc download --day=$(day) --input-file="day/$(day)/input" --overwrite
-	aoc read --day=$(day) --puzzle-file="day/$(day)/puzzle.md" --width=88 --overwrite
 .PHONY: puzzle
 
 
@@ -58,7 +58,7 @@ solve: storage  ## Run the solution for the targeted day. Arguments: `day=<day|1
 	./day/$(day)/solve.py
 .PHONY: solve
 
-help: ## Display this help screen.
+help:  ## Display this help screen.
 	@printf "\n$(ITALIC)$(GREEN)Supported Commands: $(RESET)\n"
 	@grep -E '^[a-zA-Z0-9._-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(CYAN)$(MSGPREFIX) %-$(MAX_CHARS)s$(RESET) $(ITALIC)$(DIM)%s$(RESET)\n", $$1, $$2}'
 
