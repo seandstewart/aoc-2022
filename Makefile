@@ -6,7 +6,9 @@ MAKEFLAGS += --no-builtin-rules
 
 DOCKER_RUN ?= docker compose run --rm
 
-init: install storage  ## Install all dependencies and spin up the storage backend.
+init: install storage  ## Setup your local environment for the first time.
+	cp .env.sample .env
+.PHONY: init
 
 install:  ## Install the project and its dependencies.
 	brew install scarvalhojr/tap/aoc-cli
@@ -61,8 +63,12 @@ puzzle:  ## Get the puzzle for the targeted day. Arguments: `day=<day|1>`, `part
 
 
 solve: storage  ## Run the solution for the targeted day. Arguments: `day=<day|1>`
-	./day/$(day)/solve.py
+	poetry run ./day/$(day)/solve.py
 .PHONY: solve
+
+submit: storage  ## Run the solution for the targeted day and submit it to AOC for the targeted part. Arguments: `day=<day|1>`, `part=<part|1>`.
+	aoc submit --day=$(day) $(part) $(shell poetry run ./day/$(day)/solve.py)
+.PHONY: submit
 
 help:  ## Display this help screen.
 	@printf "\n$(ITALIC)$(GREEN)Supported Commands: $(RESET)\n"
