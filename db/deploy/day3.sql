@@ -10,14 +10,26 @@ CREATE TABLE IF NOT EXISTS aoc.inventory (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS aoc.inventory_group(
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    number BIGINT NOT NULL,
+    inventory_id BIGINT REFERENCES aoc.inventory(id),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX uidx_inventory_group_number
+    ON aoc.inventory_group(number, inventory_id);
+
 CREATE TABLE IF NOT EXISTS aoc.rucksack (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    inventory_id BIGINT REFERENCES aoc.inventory(id) ON DELETE CASCADE NOT NULL,
+    inventory_group_id BIGINT REFERENCES aoc.inventory_group(id)
+        ON DELETE CASCADE NOT NULL,
     raw TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE UNIQUE INDEX uidx_rucksack_inventory_raw ON aoc.rucksack(inventory_id, raw);
+CREATE UNIQUE INDEX uidx_rucksack_inventory_raw
+    ON aoc.rucksack(inventory_group_id, raw);
 
 CREATE TABLE IF NOT EXISTS aoc.compartment (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -69,16 +81,49 @@ $$ LANGUAGE sql IMMUTABLE;
 CREATE OR REPLACE FUNCTION aoc.save_inventory("rucksacks" text) RETURNS BIGINT AS $$
     WITH new_inventory AS (
         INSERT INTO aoc.inventory DEFAULT VALUES RETURNING *
-    ), new_rucksacks AS (
-        INSERT INTO aoc.rucksack (inventory_id, raw)
+    ), parsed_rucksacks AS (
         SELECT
             ni.id as inventory_id,
+            row_number() over (order by ni.id) as number,
             raw
-        FROM
-            regexp_split_to_table(
-                rucksacks, E'\\s+'
-            ) as raw, LATERAL ( SELECT id FROM new_inventory ) ni
+        FROM regexp_split_to_table(rucksacks, E'\\s+') as raw,
+           LATERAL ( SELECT id FROM new_inventory ) ni
         WHERE length(raw) > 0
+    ),
+        groupings AS (
+        SELECT
+            row_number() over (order by ng.group_rucksacks) as group_number,
+            ng.inventory_id,
+            ng.group_rucksacks
+        FROM (
+            SELECT
+                pr.inventory_id,
+                array_agg(pr.raw) as group_rucksacks
+            FROM parsed_rucksacks pr
+            GROUP BY 1, (pr.number - 1 / 3)
+            ORDER BY 1, (pr.number - 1 / 3)
+        ) as ng
+    ), new_groups AS (
+        INSERT INTO aoc.inventory_group(number, inventory_id)
+        SELECT
+            g.group_number,
+            g.inventory_id
+        FROM groupings g
+        RETURNING *
+    ), new_rucksacks AS (
+        INSERT INTO aoc.rucksack (inventory_group_id, raw)
+        SELECT
+            nr.inventory_group_id,
+            nr.raw
+        FROM (
+            SELECT
+                ng.id as inventory_group_id,
+                unnest(g.group_rucksacks) as raw
+            FROM
+             new_groups ng
+                 INNER JOIN groupings g
+             ON g.inventory_id = ng.inventory_id AND g.group_number = ng.number
+             ) nr
         RETURNING *
     ), new_compartments AS (
         INSERT INTO aoc.compartment (rucksack_id, raw)
@@ -120,13 +165,14 @@ CREATE OR REPLACE FUNCTION aoc.calculate_overlap_magnitude("inventory_id" bigint
 RETURNS aoc.inventory_report AS $$
     WITH compartments AS (
     SELECT DISTINCT
-        r.inventory_id,
+        ig.inventory_id,
         c.rucksack_id,
         ci.compartment_id
     FROM aoc.rucksack r
+    INNER JOIN aoc.inventory_group ig on r.inventory_group_id = ig.id
     INNER JOIN aoc.compartment c on r.id = c.rucksack_id
     INNER JOIN aoc.compartment_item ci on c.id = ci.compartment_id
-    WHERE r.inventory_id = $1
+    WHERE ig.inventory_id = $1
     ORDER BY 1,2,3
 ), rucksacks AS (
     SELECT DISTINCT

@@ -8,6 +8,7 @@ DROP FUNCTION IF EXISTS public.string_nchars;
 DROP TABLE IF EXISTS aoc.compartment_item CASCADE;
 DROP TABLE IF EXISTS aoc.compartment CASCADE;
 DROP TABLE IF EXISTS aoc.rucksack CASCADE;
+DROP TABLE IF EXISTS aoc.inventory_group CASCADE;
 DROP TABLE IF EXISTS aoc.inventory CASCADE;
 DROP TABLE IF EXISTS aoc.item CASCADE;
 
