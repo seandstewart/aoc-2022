@@ -330,3 +330,67 @@ class TournamentRepository(yesql.SyncQueryRepository):
         """
         """
 
+
+class InventoryRepository(yesql.SyncQueryRepository):
+    class metadata(BaseMetadata):
+        __tablename__ = "inventory"
+
+    @typing.overload
+    def calculate_overlap_magnitude(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'Any':
+        """
+        """
+
+    @typing.overload
+    def calculate_overlap_magnitude(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'Any':
+        """
+        """
+
+    @typing.overload
+    def calculate_overlap_magnitude(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def calculate_overlap_magnitude(self, /, *, inventory_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'Any':
+        """
+        """
+
+    @typing.overload
+    def calculate_overlap_magnitude(self, /, *, inventory_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'Any':
+        """
+        """
+
+    @typing.overload
+    def calculate_overlap_magnitude(self, /, *, inventory_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def save_inventory(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def save_inventory(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, coerce: 'typing.Literal[True]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def save_inventory(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def save_inventory(self, /, *, rucksacks, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def save_inventory(self, /, *, rucksacks, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, coerce: 'typing.Literal[True]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def save_inventory(self, /, *, rucksacks, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+        """
+        """

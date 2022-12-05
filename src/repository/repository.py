@@ -29,3 +29,7 @@ class TournamentRepository(yesql.SyncQueryRepository):
     class metadata(BaseMetadata):
         __tablename__ = "tournament"
 
+
+class InventoryRepository(yesql.SyncQueryRepository):
+    class metadata(BaseMetadata):
+        __tablename__ = "inventory"
