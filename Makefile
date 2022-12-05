@@ -4,7 +4,7 @@ SHELL := bash
 MAKEFLAGS += --warn-undefined-variables
 MAKEFLAGS += --no-builtin-rules
 
-DOCKER_RUN ?= docker compose run -it --rm
+DOCKER_RUN ?= docker compose run --rm
 
 init: install storage  ## Install all dependencies and spin up the storage backend.
 
@@ -38,7 +38,8 @@ comment ?=
 require ?=
 
 new-migration:  ## Make a new migration. Required Arguments: `name=<name>`, `comment=<comment>`, `require=<require>`
-	$(DOCKER_RUN) aoc-migrations add $(name) --require $(require) -m $(comment)
+	$(DOCKER_RUN) aoc-migrations add "$(name)" --require "$(require)" -m "$(comment)"
+	git add db
 .PHONY: new-migration
 
 
