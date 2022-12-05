@@ -29,7 +29,8 @@ DO $$
         PmmdzqPrVvPwwTWBwg
         wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
         ttgJtRGJQctTZtZT
-        CrZsJsPPZsGzwwsLwLmpwMDw'
+        CrZsJsPPZsGzwwsLwLmpwMDw
+        '
         ;
         test_inventory_id := (
             SELECT aoc.save_inventory(rucksacks => test_rucksacks)

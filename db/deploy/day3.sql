@@ -78,6 +78,7 @@ CREATE OR REPLACE FUNCTION aoc.save_inventory("rucksacks" text) RETURNS BIGINT A
             regexp_split_to_table(
                 rucksacks, E'\\s+'
             ) as raw, LATERAL ( SELECT id FROM new_inventory ) ni
+        WHERE length(raw) > 0
         RETURNING *
     ), new_compartments AS (
         INSERT INTO aoc.compartment (rucksack_id, raw)

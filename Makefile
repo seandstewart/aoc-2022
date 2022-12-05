@@ -28,7 +28,7 @@ migrate-up:  ## Run any pending migrations.
 	$(DOCKER_RUN) aoc-migrations deploy
 .PHONY: migrate-up
 
-migrate-down:  ## Rever any modified migrations so we can re-apply them.
+migrate-down:  ## Revert any modified migrations so we can re-apply them.
 	$(DOCKER_RUN) aoc-migrations revert --modified
 .PHONY: migrate-down
 
@@ -41,6 +41,11 @@ new-migration:  ## Make a new migration. Required Arguments: `name=<name>`, `com
 	$(DOCKER_RUN) aoc-migrations add "$(name)" --require "$(require)" -m "$(comment)"
 	git add db
 .PHONY: new-migration
+
+
+verify-migration:  ## Make a new migration. Required Arguments: `name=<name>`
+	$(DOCKER_RUN) aoc-migrations verify "$(name)"
+.PHONY: verify-migration
 
 
 day ?= 1
