@@ -42,12 +42,12 @@ C Z
 This strategy guide predicts and recommends the following:
 
 * In the first round, your opponent will choose Rock (`A`), and you should choose
-  Paper (`Y`). This ends in a win for you with a score of *8* (2 because you chose
-  Paper + 6 because you won).
+  Paper (`Y`). This ends in a win for you with a score of *8* (2 because you chose Paper
+  + 6 because you won).
 * In the second round, your opponent will choose Paper (`B`), and you should choose
   Rock (`X`). This ends in a loss for you with a score of *1* (1 + 0).
-* The third round is a draw with both players choosing Scissors, giving you a score of
-  3 + 3 = *6*.
+* The third round is a draw with both players choosing Scissors, giving you a score of 3
+  + 3 = *6*.
 
 In this example, if you were to follow the strategy guide, you would get a total score
 of `*15*` (8 + 1 + 6).
@@ -56,8 +56,6 @@ of `*15*` (8 + 1 + 6).
 guide?*
 
 Your puzzle answer was `12679`.
-
-The first half of this puzzle is complete! It provides one gold star: \*
 
 \--- Part Two ---
 ----------
@@ -82,10 +80,15 @@ a total score of `*12*`.
 Following the Elf's instructions for the second column, *what would your total score be
 if everything goes exactly according to your strategy guide?*
 
-Answer:
+Your puzzle answer was `14470`.
 
-Although it hasn't changed, you can still [get your puzzle input](2/input).
+Both parts of this puzzle are complete! They provide two gold stars: \*\*
+
+At this point, you should [return to your Advent calendar](/2022) and try another
+puzzle.
+
+If you still want to see it, you can [get your puzzle input](2/input).
 
 You can
-also [Shareon [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Rock+Paper+Scissors%22+%2D+Day+2+%2D+Advent+of+Code+2022&url=https%3A%2F%2Fadventofcode%2Ecom%2F2022%2Fday%2F2&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)]
+also [Shareon [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+%22Rock+Paper+Scissors%22+%2D+Day+2+%2D+Advent+of+Code+2022&url=https%3A%2F%2Fadventofcode%2Ecom%2F2022%2Fday%2F2&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)]
 this puzzle.

@@ -16,8 +16,8 @@ grants *one star*. Good luck!
 
 The jungle must be too overgrown and difficult to navigate in vehicles or access from
 the air; the Elves' expedition traditionally goes on foot. As your boats approach land,
-the Elves begin taking inventory of their supplies. One important consideration is
-food - in particular, the number of *Calories* each Elf is carrying (your puzzle input).
+the Elves begin taking inventory of their supplies. One important consideration is food
+- in particular, the number of *Calories* each Elf is carrying (your puzzle input).
 
 The Elves take turns writing down the number of Calories contained by the various meals,
 snacks, rations, etc. that they've brought with them, one item per line. Each Elf
@@ -64,8 +64,6 @@ Find the Elf carrying the most Calories. *How many total Calories is that Elf ca
 
 Your puzzle answer was `65912`.
 
-The first half of this puzzle is complete! It provides one gold star: \*
-
 \--- Part Two ---
 ----------
 
@@ -83,10 +81,15 @@ The sum of the Calories carried by these three elves is `*45000*`.
 Find the top three Elves carrying the most Calories. *How many Calories are those Elves
 carrying in total?*
 
-Answer:
+Your puzzle answer was `195625`.
 
-Although it hasn't changed, you can still [get your puzzle input](1/input).
+Both parts of this puzzle are complete! They provide two gold stars: \*\*
+
+At this point, you should [return to your Advent calendar](/2022) and try another
+puzzle.
+
+If you still want to see it, you can [get your puzzle input](1/input).
 
 You can
-also [Shareon [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Calorie+Counting%22+%2D+Day+1+%2D+Advent+of+Code+2022&url=https%3A%2F%2Fadventofcode%2Ecom%2F2022%2Fday%2F1&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)]
+also [Shareon [Twitter](https://twitter.com/intent/tweet?text=I%27ve+completed+%22Calorie+Counting%22+%2D+Day+1+%2D+Advent+of+Code+2022&url=https%3A%2F%2Fadventofcode%2Ecom%2F2022%2Fday%2F1&related=ericwastl&hashtags=AdventOfCode) [Mastodon](javascript:void(0);)]
 this puzzle.
