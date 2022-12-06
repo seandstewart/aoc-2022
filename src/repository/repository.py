@@ -23,7 +23,6 @@ class MealsRepository(yesql.SyncQueryRepository):
         __tablename__ = "meals"
 
 
-
 class TournamentRepository(yesql.SyncQueryRepository):
 
     class metadata(BaseMetadata):
@@ -33,3 +32,9 @@ class TournamentRepository(yesql.SyncQueryRepository):
 class InventoryRepository(yesql.SyncQueryRepository):
     class metadata(BaseMetadata):
         __tablename__ = "inventory"
+
+
+class AssignmentRepository(yesql.SyncQueryRepository):
+
+    class metadata(BaseMetadata):
+        __tablename__ = "assignment"
