@@ -2,7 +2,8 @@
 
 BEGIN;
 
-DROP FUNCTION IF EXISTS aoc.calculate_overlap_magnitude;
+DROP FUNCTION IF EXISTS aoc.calculate_overlap_magnitude_by_compartment;
+DROP FUNCTION IF EXISTS aoc.calculate_overlap_magnitude_by_group;
 DROP FUNCTION IF EXISTS aoc.save_inventory;
 DROP FUNCTION IF EXISTS public.string_nchars;
 DROP TABLE IF EXISTS aoc.compartment_item CASCADE;

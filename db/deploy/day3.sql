@@ -84,46 +84,27 @@ CREATE OR REPLACE FUNCTION aoc.save_inventory("rucksacks" text) RETURNS BIGINT A
     ), parsed_rucksacks AS (
         SELECT
             ni.id as inventory_id,
-            row_number() over (order by ni.id) as number,
+            ((row_number() over (order by ni.id)) - 1) / 3 + 1 as group_number,
             raw
         FROM regexp_split_to_table(rucksacks, E'\\s+') as raw,
            LATERAL ( SELECT id FROM new_inventory ) ni
         WHERE length(raw) > 0
-    ),
-        groupings AS (
-        SELECT
-            row_number() over (order by ng.group_rucksacks) as group_number,
-            ng.inventory_id,
-            ng.group_rucksacks
-        FROM (
-            SELECT
-                pr.inventory_id,
-                array_agg(pr.raw) as group_rucksacks
-            FROM parsed_rucksacks pr
-            GROUP BY 1, (pr.number - 1 / 3)
-            ORDER BY 1, (pr.number - 1 / 3)
-        ) as ng
     ), new_groups AS (
         INSERT INTO aoc.inventory_group(number, inventory_id)
-        SELECT
-            g.group_number,
-            g.inventory_id
-        FROM groupings g
+        SELECT DISTINCT
+            pr.group_number,
+            pr.inventory_id
+        FROM parsed_rucksacks pr
         RETURNING *
     ), new_rucksacks AS (
         INSERT INTO aoc.rucksack (inventory_group_id, raw)
         SELECT
-            nr.inventory_group_id,
-            nr.raw
-        FROM (
-            SELECT
-                ng.id as inventory_group_id,
-                unnest(g.group_rucksacks) as raw
-            FROM
-             new_groups ng
-                 INNER JOIN groupings g
-             ON g.inventory_id = ng.inventory_id AND g.group_number = ng.number
-             ) nr
+            ng.id as inventory_group_id,
+            pr2.raw
+        FROM parsed_rucksacks pr2
+            INNER JOIN new_groups ng
+            ON ng.inventory_id = pr2.inventory_id
+            AND ng.number = pr2.group_number
         RETURNING *
     ), new_compartments AS (
         INSERT INTO aoc.compartment (rucksack_id, raw)
@@ -161,55 +142,83 @@ CREATE TYPE aoc.inventory_report AS (
     overlap_items text[]
 );
 
-CREATE OR REPLACE FUNCTION aoc.calculate_overlap_magnitude("inventory_id" bigint)
+CREATE OR REPLACE FUNCTION aoc.calculate_overlap_magnitude_by_compartment("inventory_id" bigint)
 RETURNS aoc.inventory_report AS $$
-    WITH compartments AS (
-    SELECT DISTINCT
-        ig.inventory_id,
-        c.rucksack_id,
-        ci.compartment_id
-    FROM aoc.rucksack r
-    INNER JOIN aoc.inventory_group ig on r.inventory_group_id = ig.id
-    INNER JOIN aoc.compartment c on r.id = c.rucksack_id
-    INNER JOIN aoc.compartment_item ci on c.id = ci.compartment_id
-    WHERE ig.inventory_id = $1
-    ORDER BY 1,2,3
-), rucksacks AS (
-    SELECT DISTINCT
-        cr.inventory_id,
-        cr.rucksack_id,
-        oi.overlapping_items[1] as overlapping_item_id
-    FROM compartments cr, LATERAL (
-        SELECT
-            cr.compartment_id,
-            array(
-                SELECT unnest(
-                    array_agg(DISTINCT ci2.item_id) filter (
-                        where
-                        ci2.compartment_id = cr.compartment_id
-                    )
-                )
-                INTERSECT
-                SELECT unnest(
-                    array_agg(DISTINCT ci2.item_id) filter (
-                        where ci2.compartment_id != cr.compartment_id
-                        and cr2.rucksack_id = cr.rucksack_id
+    WITH items_by_rucksack AS (
+        SELECT DISTINCT
+            ig.inventory_id,
+            c.rucksack_id,
+            ci.compartment_id,
+            ci.item_id,
+            i.item_type
+        FROM
+            aoc.inventory_group ig
+            INNER JOIN aoc.rucksack r on ig.id = r.inventory_group_id
+            INNER JOIN aoc.compartment c on c.rucksack_id = r.id
+            INNER JOIN aoc.compartment_item ci on c.id = ci.compartment_id
+            INNER JOIN aoc.item i on ci.item_id = i.id
+        WHERE ig.inventory_id = $1
+    ), overlaps_by_compartment AS (
+        SELECT DISTINCT
+            ibr.inventory_id,
+            ibr.rucksack_id,
+            ibr.item_id,
+            ibr.item_type
+        FROM items_by_rucksack ibr
+        INNER JOIN items_by_rucksack ibr2
+            ON ibr2.item_id = ibr.item_id
+            AND ibr2.rucksack_id = ibr.rucksack_id
+            AND ibr2.compartment_id != ibr.compartment_id
+    )
+    SELECT
+        obc.inventory_id,
+        sum(obc.item_id) AS overlap_magnitude,
+        array_agg(DISTINCT obc.item_type) AS overlap_items
+    FROM overlaps_by_compartment obc
+    GROUP BY 1
 
-                    )
-                )
-            ) as overlapping_items
-        FROM aoc.compartment_item ci2
-        INNER JOIN compartments cr2 ON ci2.compartment_id = cr2.compartment_id
-        GROUP BY 1
-    ) oi
-)
-SELECT rucksacks.inventory_id,
-       sum(rucksacks.overlapping_item_id) as overlapping_magnitude,
-       array_agg(distinct i.item_type order by i.item_type) as overlapping_items
-FROM rucksacks
-INNER JOIN aoc.item i on i.id = rucksacks.overlapping_item_id
-GROUP BY 1
 $$ LANGUAGE sql;
 
+
+CREATE OR REPLACE FUNCTION aoc.calculate_overlap_magnitude_by_group(
+    "inventory_id" bigint
+) RETURNS aoc.inventory_report AS $$
+    WITH items_by_rucksack AS (
+        SELECT DISTINCT
+            ig.inventory_id,
+            r.inventory_group_id,
+            c.rucksack_id,
+            ci.item_id,
+            i.item_type
+        FROM
+            aoc.inventory_group ig
+            INNER JOIN aoc.rucksack r on ig.id = r.inventory_group_id
+            INNER JOIN aoc.compartment c on c.rucksack_id = r.id
+            INNER JOIN aoc.compartment_item ci on c.id = ci.compartment_id
+            INNER JOIN aoc.item i on ci.item_id = i.id
+        WHERE ig.inventory_id = $1
+    ), overlaps_by_group AS (
+        SELECT DISTINCT
+            ibr.inventory_id,
+            ibr.inventory_group_id,
+            ibr.item_id,
+            ibr.item_type
+        FROM items_by_rucksack ibr
+        INNER JOIN items_by_rucksack ibr2
+            ON ibr2.item_id = ibr.item_id
+            AND ibr2.inventory_group_id = ibr.inventory_group_id
+            AND ibr2.rucksack_id != ibr.rucksack_id
+        INNER JOIN items_by_rucksack ibr3
+            ON ibr3.item_id = ibr.item_id
+            AND ibr3.inventory_group_id = ibr.inventory_group_id
+            AND ibr3.rucksack_id not in (ibr.rucksack_id, ibr2.rucksack_id)
+    )
+    SELECT
+        obg.inventory_id,
+        sum(obg.item_id) as overlap_magnitude,
+        array_agg(distinct obg.item_type) as overlap_items
+    FROM overlaps_by_group obg
+    GROUP BY 1
+$$ LANGUAGE sql;
 
 COMMIT;
