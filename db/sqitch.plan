@@ -8,3 +8,4 @@ day2 [aocschema] 2022-12-02T23:08:23Z System Administrator <root@Seans-MacBook-P
 day2-part2 [day2] 2022-12-04T16:11:46Z System Administrator <root@Seans-MacBook-Pro-3.local> # Add support for outcome aliases
 day3 [aocschema] 2022-12-04T20:19:08Z sqitch <sqitch@3d38e9010ea1> # Add tables for tracking rucksacks.
 day4 [aocschema] 2022-12-06T18:10:17Z sqitch <sqitch@df2e0dd8733f> # schema to track section overlaps
+day6 [aocschema] 2022-12-06T21:36:45Z sqitch <sqitch@7287f6cbf8ee> # schema to track bytestreams

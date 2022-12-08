@@ -38,3 +38,9 @@ class AssignmentRepository(yesql.SyncQueryRepository):
 
     class metadata(BaseMetadata):
         __tablename__ = "assignment"
+
+
+class StreamRepository(yesql.SyncQueryRepository):
+
+    class metadata(BaseMetadata):
+        __tablename__ = "stream"
