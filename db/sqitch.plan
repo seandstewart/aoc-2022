@@ -9,3 +9,4 @@ day2-part2 [day2] 2022-12-04T16:11:46Z System Administrator <root@Seans-MacBook-
 day3 [aocschema] 2022-12-04T20:19:08Z sqitch <sqitch@3d38e9010ea1> # Add tables for tracking rucksacks.
 day4 [aocschema] 2022-12-06T18:10:17Z sqitch <sqitch@df2e0dd8733f> # schema to track section overlaps
 day6 [aocschema] 2022-12-06T21:36:45Z sqitch <sqitch@7287f6cbf8ee> # schema to track bytestreams
+day5 [aocschema] 2022-12-09T00:07:56Z sqitch <sqitch@19b9365a40be> # schema to track cargo
