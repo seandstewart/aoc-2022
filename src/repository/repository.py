@@ -44,3 +44,9 @@ class StreamRepository(yesql.SyncQueryRepository):
 
     class metadata(BaseMetadata):
         __tablename__ = "stream"
+
+
+class ContainerRepository(yesql.SyncQueryRepository):
+
+    class metadata(BaseMetadata):
+        __tablename__ = "container"

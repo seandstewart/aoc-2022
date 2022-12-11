@@ -1,6 +1,9 @@
 -- Deploy aoc-2022:day5 to pg
 -- requires: aocschema
 
+ALTER SYSTEM SET log_min_messages = 'DEBUG';
+ALTER SYSTEM RESET log_min_error_statement;
+ALTER SYSTEM SET log_error_verbosity = 'TERSE';
 BEGIN;
 
 -- region: schema
@@ -23,7 +26,8 @@ CREATE UNIQUE INDEX uidx_container_name ON aoc.container(name);
 
 
 CREATE TABLE IF NOT EXISTS aoc.container_location (
-    container_id BIGINT PRIMARY KEY REFERENCES aoc.container(id) NOT NULL,
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    container_id BIGINT REFERENCES aoc.container(id) NOT NULL,
     stack_number BIGINT NOT NULL,
     stack_position BIGINT NOT NULL,
     created_at timestamptz NOT NULL DEFAULT current_timestamp,
@@ -69,17 +73,18 @@ CREATE OR REPLACE FUNCTION aoc.save_container_locations(
         SELECT (unnest(new_locations)::aoc.new_container_location).*
     ), new_container AS (
         INSERT INTO aoc.container (name)
-        SELECT name FROM container_locations
+        SELECT DISTINCT name FROM container_locations
         ON CONFLICT (name) DO UPDATE SET name=excluded.name
         RETURNING *
     ), new_location AS (
         INSERT INTO aoc.container_location (container_id, stack_number, stack_position)
-        SELECT
+        SELECT DISTINCT ON (cl.stack_number, cl.stack_position)
             nc.id as container_id,
             cl.stack_number,
             cl.stack_position
         FROM new_container nc
-        INNER JOIN container_locations cl ON cl.name = nc.name
+        INNER JOIN container_locations cl
+            ON cl.name = nc.name
         ON CONFLICT (stack_number, stack_position)
         DO UPDATE SET container_id = excluded.container_id
         RETURNING *
@@ -134,7 +139,7 @@ CREATE OR REPLACE FUNCTION aoc.move_container(
     from_stack BIGINT, to_stack BIGINT
 ) RETURNS aoc.stack_report LANGUAGE sql AS $$
     WITH container_at_stack AS (
-        SELECT container_id, np.new_position
+        SELECT container_id, stack_number, stack_position, np.new_position
         FROM aoc.container_location, LATERAL (
             SELECT coalesce(max(stack_position), 0) + 1 AS new_position
             FROM aoc.container_location
@@ -148,7 +153,10 @@ CREATE OR REPLACE FUNCTION aoc.move_container(
             stack_number = to_stack,
             stack_position = new_position
         FROM container_at_stack cas
-        WHERE cl.container_id = cas.container_id
+        WHERE
+            cl.container_id = cas.container_id
+            AND cl.stack_number = cas.stack_number
+            AND cl.stack_position = cas.stack_position
         RETURNING cl.*
     )
     SELECT
@@ -178,6 +186,7 @@ CREATE OR REPLACE FUNCTION aoc.get_top_container_per_stack(
     INNER JOIN top_stack_positions tsp
         ON tsp.stack_number = cl.stack_number
         AND tsp.stack_position = cl.stack_position
+    ORDER BY 1
 $$;
 
 CREATE OR REPLACE FUNCTION aoc.run_container_move_set(
@@ -198,7 +207,7 @@ CREATE OR REPLACE FUNCTION aoc.run_container_move_set(
         RAISE INFO 'Got % move(s) for move-set.', cardinality(moves);
         FOREACH move in ARRAY moves
         LOOP
-            RAISE INFO 'Running Move #%: move % from % to %',
+            RAISE LOG 'Running Move #%: move % from % to %',
                 move.move_number,
                 move.number_containers,
                 move.from_stack_number,
@@ -212,7 +221,7 @@ CREATE OR REPLACE FUNCTION aoc.run_container_move_set(
                 );
                 iteration := iteration - 1;
                 total_moved := total_moved + 1;
-                RAISE INFO 'Ran Move #% (%/%): moved % to %, (pos %)',
+                RAISE DEBUG 'Ran Move #% (%/%): moved % to %, (pos %)',
                     move.move_number,
                     total_moved,
                     move.number_containers,
