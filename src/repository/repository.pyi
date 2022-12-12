@@ -681,3 +681,63 @@ class ContainerRepository(yesql.SyncQueryRepository):
     def move_containers_cursor(self, /, *, move_set_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
         """
         """
+
+    @typing.overload
+    def move_containers_atomic(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'list[Any]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'list[Any]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic(self, /, *, move_set_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None) -> 'list[Any]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic(self, /, *, move_set_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[True]') -> 'list[Any]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic(self, /, *, move_set_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None, deserializer: 'yesql.types.DeserializerT | None' = None, coerce: 'typing.Literal[False]') -> 'typing.Any':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic_cursor(self, /, *, instance: 'Any | None' = None, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic_cursor(self, /, *, move_set_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic_cursor(self, /, *, move_set_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
+        """
+        """
+
+    @typing.overload
+    def move_containers_atomic_cursor(self, /, *, move_set_id, connection: 'yesql.types.ConnectionT' = None, timeout: 'float' = 10, transaction: 'bool' = True, rollback: 'bool' = False, serializer: 'yesql.types.SerializerT | None' = None) -> 'typing.ContextManager[yesql.types.CursorT]':
+        """
+        """

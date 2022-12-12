@@ -167,6 +167,46 @@ CREATE OR REPLACE FUNCTION aoc.move_container(
     INNER JOIN updated_location ul ON ul.container_id = c.id
 $$;
 
+CREATE OR REPLACE FUNCTION aoc.move_containers(
+    from_stack BIGINT, to_stack BIGINT, number BIGINT
+) RETURNS aoc.stack_report LANGUAGE sql AS $$
+    WITH containers_from_stack AS (
+        SELECT
+            c.name as container_name,
+            cl2.container_id,
+            cl2.stack_position as current_stack_position,
+            cl2.stack_number as current_stack_number,
+            to_stack as to_stack_number,
+            np.to_max_stack_position
+        FROM aoc.container_location cl2
+        INNER JOIN aoc.container c on c.id = cl2.container_id,
+        LATERAL (
+            SELECT coalesce(max(stack_position), 0) AS to_max_stack_position
+            FROM aoc.container_location
+            WHERE stack_number = to_stack
+        ) np
+        WHERE
+            cl2.stack_number = from_stack
+        ORDER BY cl2.stack_position DESC
+        LIMIT number
+    ), containers_with_target AS (
+        SELECT *, cfs.to_max_stack_position + row_number() OVER (
+            ORDER BY cfs.current_stack_position
+        ) AS to_stack_position
+        FROM containers_from_stack cfs
+    )
+    UPDATE aoc.container_location cl
+    SET
+        stack_number = cwt.to_stack_number,
+        stack_position = cwt.to_stack_position
+    FROM containers_with_target cwt
+    WHERE
+        cl.container_id = cwt.container_id
+        AND cl.stack_number = cwt.current_stack_number
+        AND cl.stack_position = cwt.current_stack_position
+    RETURNING cl.stack_number, cl.stack_position, cwt.container_name
+$$;
+
 CREATE OR REPLACE FUNCTION aoc.get_top_container_per_stack(
 ) RETURNS SETOF aoc.stack_report LANGUAGE sql AS $$
     WITH top_stack_positions AS (
@@ -190,13 +230,14 @@ CREATE OR REPLACE FUNCTION aoc.get_top_container_per_stack(
 $$;
 
 CREATE OR REPLACE FUNCTION aoc.run_container_move_set(
-    move_set_id BIGINT
+    move_set_id BIGINT, atomic bool default FALSE
 ) RETURNS SETOF aoc.stack_report LANGUAGE plpgsql AS $$
     DECLARE moves aoc.container_move[];
     DECLARE move aoc.container_move;
     DECLARE iteration BIGINT;
     DECLARE total_moved BIGINT;
     DECLARE current_position aoc.stack_report;
+    DECLARE current_positions aoc.stack_report[];
     BEGIN
         moves := ARRAY (
             SELECT cm
@@ -205,32 +246,49 @@ CREATE OR REPLACE FUNCTION aoc.run_container_move_set(
             ORDER BY move_number
         );
         RAISE INFO 'Got % move(s) for move-set.', cardinality(moves);
-        FOREACH move in ARRAY moves
-        LOOP
-            RAISE LOG 'Running Move #%: move % from % to %',
+        IF atomic IS TRUE THEN
+            FOREACH move in ARRAY moves
+            LOOP
+                RAISE INFO 'Running Move #%: move % from % to %',
                 move.move_number,
                 move.number_containers,
                 move.from_stack_number,
-                move.to_stack_number;
-            iteration := move.number_containers;
-            total_moved := 0;
-            WHILE iteration > 0 LOOP
-                current_position := aoc.move_container(
-                    from_stack => move.from_stack_number,
-                    to_stack => move.to_stack_number
-                );
-                iteration := iteration - 1;
-                total_moved := total_moved + 1;
-                RAISE DEBUG 'Ran Move #% (%/%): moved % to %, (pos %)',
-                    move.move_number,
-                    total_moved,
-                    move.number_containers,
-                    current_position.top_container_name,
-                    current_position.stack_number,
-                    current_position.top_stack_position
+                move.to_stack_number
                 ;
+                PERFORM aoc.move_containers(
+                    from_stack => move.from_stack_number,
+                    to_stack => move.to_stack_number,
+                    number => move.number_containers
+                );
             END LOOP;
-        END LOOP;
+        ELSE
+            FOREACH move in ARRAY moves
+            LOOP
+                RAISE INFO 'Running Move #%: move % from % to %',
+                    move.move_number,
+                    move.number_containers,
+                    move.from_stack_number,
+                    move.to_stack_number;
+                iteration := move.number_containers;
+                total_moved := 0;
+                WHILE iteration > 0 LOOP
+                    current_position := aoc.move_container(
+                        from_stack => move.from_stack_number,
+                        to_stack => move.to_stack_number
+                    );
+                    iteration := iteration - 1;
+                    total_moved := total_moved + 1;
+                    RAISE INFO 'Ran Move #% (%/%): moved % to %, (pos %)',
+                        move.move_number,
+                        total_moved,
+                        move.number_containers,
+                        current_position.top_container_name,
+                        current_position.stack_number,
+                        current_position.top_stack_position
+                    ;
+                END LOOP;
+            END LOOP;
+        END IF;
         RETURN QUERY (
             SELECT * FROM aoc.get_top_container_per_stack() ORDER BY stack_number
         );

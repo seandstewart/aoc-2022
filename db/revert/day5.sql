@@ -5,6 +5,7 @@ BEGIN;
 DROP FUNCTION IF EXISTS aoc.run_container_move_set;
 DROP FUNCTION IF EXISTS aoc.get_top_container_per_stack;
 DROP FUNCTION IF EXISTS aoc.move_container;
+DROP FUNCTION IF EXISTS aoc.move_containers;
 DROP FUNCTION IF EXISTS aoc.save_container_moves;
 DROP FUNCTION IF EXISTS aoc.save_container_locations;
 DROP TYPE IF EXISTS aoc.new_container_location;

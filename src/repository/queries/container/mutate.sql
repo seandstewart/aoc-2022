@@ -20,3 +20,8 @@ SELECT * FROM aoc.save_container_moves(
 
 -- :name move_containers :many
 SELECT * FROM aoc.run_container_move_set(move_set_id => :move_set_id::bigint);
+
+-- :name move_containers_atomic :many
+SELECT * FROM aoc.run_container_move_set(
+    move_set_id => :move_set_id::bigint, atomic => true
+);

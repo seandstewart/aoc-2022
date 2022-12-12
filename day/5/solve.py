@@ -58,7 +58,7 @@ def solve():
         move_set_id = repo.save_container_move_set(
             moves=support.dumps(moves), connection=connection
         )
-        reports = repo.move_containers(move_set_id=move_set_id, connection=connection)
+        reports = repo.move_containers_atomic(move_set_id=move_set_id, connection=connection)
         return "".join(r.top_container_name for r in reports)
 
 
